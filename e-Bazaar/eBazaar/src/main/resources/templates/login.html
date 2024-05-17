@@ -1,6 +1,6 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
@@ -29,9 +29,10 @@
             /*border-bottom-right-radius: 6%;*/
             /*border-top-right-radius: 6%;*/
         }
-        .right-half{
-            background: rgb(26,46,53);
-            background: linear-gradient(151deg, rgba(26,46,53,1) 0%, rgba(28,187,180,1) 70%);
+
+        .right-half {
+            background: rgb(238, 243, 210);
+            background: linear-gradient(151deg, rgba(238, 243, 210, 1) 10%, rgba(252, 136, 132, 1) 90%);
             /*background-color: #F9F9F9;*/
             border-bottom-left-radius: 6%;
             border-top-left-radius: 6%;
@@ -49,7 +50,7 @@
             <div class="container">
                 <div class="row justify-content-center mt-5">
                     <div class="col-12 text-center mt-5">
-                        <img src="../static/Screenshot_1-removebg.png">
+                        <img th:src="@{/Screenshot_1-removebg.png}" alt="">
                     </div>
                 </div>
             </div>
@@ -62,7 +63,7 @@
                         <div class="container">
                             <div class="row justify-content-center">
                                 <div class="col-12 text-center">
-                                    <img src="../static/logo.png" style="height: 160px; width: 160px">
+                                    <img th:src="@{/logo.png}" style="height: 160px; width: 160px">
                                     <p style="margin-top:-15px;margin-left: -15px;font-size: 25px; font-style: oblique; font-weight: bold">
                                         eBazaar</p>
                                 </div>
