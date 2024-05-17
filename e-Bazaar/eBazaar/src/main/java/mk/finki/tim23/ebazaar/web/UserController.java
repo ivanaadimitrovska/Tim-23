@@ -49,7 +49,7 @@ public class UserController {
         try {
             this.userService.register(username, password, confirmPassword, email, fullName);
             //TODO: Change the return
-            return "redirect:/login";
+            return "redirect:/user/login";
         } catch (InvalidUserCredentialsException | PasswordsDoNotMatchException exception) {
             //TODO: Change the return
             return "redirect:/register?error=" + exception.getMessage();
@@ -69,7 +69,8 @@ public class UserController {
             user = this.authService.login(request.getParameter("username"),
                     request.getParameter("password"));
             request.getSession().setAttribute("user", user);
-            //TODO: Change the return
+
+            User serssionUser = (User) request.getSession().getAttribute("user");
             return "redirect:/home";
         } catch (InvalidUserCredentialsException exception) {
             model.addAttribute("hasError", true);
