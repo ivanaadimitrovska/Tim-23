@@ -14,9 +14,11 @@ public interface PostService {
 
     Optional<Post> findById(Long id);
 
+    List<Post> findAllPostByCategory(Category category);
+
     Optional<Post> findByTitle(String title);
 
-    Optional<Post> save(String title, Double price, String description, Byte[] image, Category category, String postAuthorUsername);
+    Optional<Post> save(String title, Double price, String description, Byte[] image, Category category);
 
     Optional<Post> edit(Long id, String title, Double price, String description, Byte[] image, Category category);
 

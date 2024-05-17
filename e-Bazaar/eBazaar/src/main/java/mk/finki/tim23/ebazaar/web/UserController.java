@@ -43,11 +43,11 @@ public class UserController {
     @PostMapping("/register")
     public String register(@RequestParam String username,
                            @RequestParam String password,
-                           @RequestParam String confirmPassowrd,
+                           @RequestParam String confirmPassword,
                            @RequestParam String fullName,
                            @RequestParam String email) {
         try {
-            this.userService.register(username, password, confirmPassowrd, email, fullName);
+            this.userService.register(username, password, confirmPassword, email, fullName);
             //TODO: Change the return
             return "redirect:/login";
         } catch (InvalidUserCredentialsException | PasswordsDoNotMatchException exception) {

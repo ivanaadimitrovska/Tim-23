@@ -35,17 +35,24 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public List<Post> findAllPostByCategory(Category category) {
+        return this.postRepository.findAllByCategory(category);
+    }
+
+    @Override
     public Optional<Post> findByTitle(String title) {
         return this.postRepository.findByTitle(title);
     }
 
     @Override
-    public Optional<Post> save(String title, Double price, String description, Byte[] image, Category category, String postAuthorUsername) {
-        User user = this.userRepository.findByUsername(postAuthorUsername)
-                .orElseThrow( () -> new UserNotFoundException(postAuthorUsername));
-        Post post = new Post(title,price,description,image,category,user);
-        this.postRepository.save(post);
-        return Optional.of(post);
+    public Optional<Post> save(String title, Double price, String description, Byte[] image, Category category) {
+        //TODO: get the postAuthorUsername
+//        User user = this.userRepository.findByUsername(postAuthorUsername)
+//                .orElseThrow( () -> new UserNotFoundException(postAuthorUsername));
+//        Post post = new Post(title,price,description,image,category,user);
+//        this.postRepository.save(post);
+//        return Optional.of(post);
+        return null;
     }
 
     @Override
