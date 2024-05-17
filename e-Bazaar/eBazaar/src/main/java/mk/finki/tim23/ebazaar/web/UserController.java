@@ -25,15 +25,19 @@ public class UserController {
         this.authService = authService;
     }
 
-    @GetMapping
+    @GetMapping("")
+    public String index() {
+        return "index";
+    }
+
+    @GetMapping("/register")
     public String getRegisterPage(@RequestParam(required = false) String error, Model model) {
-        if(error != null && !error.isEmpty()) {
+        if (error != null && !error.isEmpty()) {
             model.addAttribute("hasError", true);
             model.addAttribute("error", error);
         }
-        model.addAttribute("bodyContent","register");
-        //TODO: Change the return
-        return "register";
+        model.addAttribute("bodyContent", "register");
+        return "sign-up";
     }
 
     @PostMapping("/register")
@@ -42,7 +46,7 @@ public class UserController {
                            @RequestParam String confirmPassowrd,
                            @RequestParam String fullName,
                            @RequestParam String email) {
-        try{
+        try {
             this.userService.register(username, password, confirmPassowrd, email, fullName);
             //TODO: Change the return
             return "redirect:/login";
@@ -54,8 +58,8 @@ public class UserController {
 
     @GetMapping("/login")
     public String getLoginPage(Model model) {
-        model.addAttribute("bodyContent","login");
-        return "master-template";
+        model.addAttribute("bodyContent", "login");
+        return "login";
     }
 
     @PostMapping("/login")
@@ -71,7 +75,7 @@ public class UserController {
             model.addAttribute("hasError", true);
             model.addAttribute("error", exception.getMessage());
             //TODO: Change the return
-            return "login";
+            return "redirect:/index";
         }
     }
 }
