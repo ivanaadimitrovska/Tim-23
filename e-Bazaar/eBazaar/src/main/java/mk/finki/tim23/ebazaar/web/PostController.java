@@ -32,7 +32,8 @@ public class PostController {
         List<Post> posts = this.postService.findAllPostByCategory(c);
         model.addAttribute("posts", posts);
         model.addAttribute("category", c);
-        return "post-view";
+        model.addAttribute("bodyContent", "post-view");
+        return "master-template";
     }
 
     @GetMapping("/edit/{postId}")
