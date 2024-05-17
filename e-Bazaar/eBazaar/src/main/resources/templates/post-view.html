@@ -1,5 +1,7 @@
+
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org/">
 <head>
   <!-- Basic -->
   <meta charset="utf-8"/>
@@ -110,20 +112,22 @@
   <!-- end header section -->
 </div>
 
+<div>
+  <h2 th:text="${category}"></h2>
+</div>
 <section class="container mt-5 mb-5">
-  <div class="card mb-3" style="max-width: 540px;">
+  <div th:each="post : ${posts}" class="card mb-3" style="max-width: 540px;">
     <div class="row g-0">
       <div class="col-md-4">
-        <img src="..." class="img-fluid rounded-start" alt="...">
+        <img th:text="${post.getImage()}" src="..." class="img-fluid rounded-start" alt="...">
       </div>
       <div class="col-md-8">
         <div class="card-body">
-          <h5 class="card-title"><a href="post-view.html" style="text-decoration: none; color: black"> Card title</a> </h5>
-          <p><small class="text-body-secondary">created by: Sara Gligorova</small>  </p>
-          <p> Price </p>
-          <p class="card-text">This is a wider card with supporting text below as a natural
-            lead-in to additional content. This content is a little bit longer.</p>
-          <p class="card-text"><small class="text-body-secondary">26.04.2024</small></p>
+          <h5 class="card-title"><a href="post-view.html" style="text-decoration: none; color: black"></a> </h5>
+          <p><small th:text="${post.getTitle()}" class="text-body-secondary"></small>  </p>
+          <p th:text="${post.getPrice()}"> </p>
+          <p th:text="${post.getDescription()}"class="card-text"></p>
+          <p class="card-text"><small th:text="${post.getDate()}" class="text-body-secondary"></small></p>
 
         </div>
       </div>
