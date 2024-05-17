@@ -70,7 +70,7 @@ public class UserController {
                     request.getParameter("password"));
             request.getSession().setAttribute("user", user);
             //TODO: Change the return
-            return "redirect:/home";
+            return "redirect:/";
         } catch (InvalidUserCredentialsException exception) {
             model.addAttribute("hasError", true);
             model.addAttribute("error", exception.getMessage());

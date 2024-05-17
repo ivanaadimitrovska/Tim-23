@@ -1,5 +1,6 @@
 package mk.finki.tim23.ebazaar.service.impl;
 
+import jakarta.servlet.http.HttpServletRequest;
 import mk.finki.tim23.ebazaar.models.Category;
 import mk.finki.tim23.ebazaar.models.Post;
 import mk.finki.tim23.ebazaar.models.User;
@@ -45,18 +46,17 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Optional<Post> save(String title, Double price, String description, Byte[] image, Category category) {
+    public Optional<Post> save(String title, Double price, String description,
+                               byte[] image, Category category, HttpServletRequest request) {
         //TODO: get the postAuthorUsername
-//        User user = this.userRepository.findByUsername(postAuthorUsername)
-//                .orElseThrow( () -> new UserNotFoundException(postAuthorUsername));
-//        Post post = new Post(title,price,description,image,category,user);
-//        this.postRepository.save(post);
-//        return Optional.of(post);
-        return null;
+        User user = (User) request.getSession().getAttribute("user");
+        Post post = new Post(title,price,description,image,category,user);
+        this.postRepository.save(post);
+        return Optional.of(post);
     }
 
     @Override
-    public Optional<Post> edit(Long id, String title, Double price, String description, Byte[] image, Category category){
+    public Optional<Post> edit(Long id, String title, Double price, String description, byte[] image, Category category){
         Post post = this.postRepository.findById(id)
                 .orElseThrow( () -> new PostNotFoundException());
         post.setTitle(title);

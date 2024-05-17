@@ -1,13 +1,18 @@
 package mk.finki.tim23.ebazaar.web;
 
+import jakarta.servlet.http.HttpServletRequest;
 import mk.finki.tim23.ebazaar.models.Category;
 import mk.finki.tim23.ebazaar.models.Post;
 import mk.finki.tim23.ebazaar.service.PostService;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @Controller
@@ -20,9 +25,9 @@ public class PostController {
         this.postService = postService;
     }
 
-    @GetMapping("/posts")
-    public String getAllPosts() {
-        return "categories";
+    @GetMapping
+    public String getHomePage() {
+        return "index";
     }
 
     @GetMapping("/posts/{category}")
@@ -52,7 +57,7 @@ public class PostController {
                              @RequestParam String title,
                              @RequestParam Double price,
                              @RequestParam String description,
-                             @RequestParam Byte[] image,
+                             @RequestParam byte[] image,
                              @RequestParam Category category) {
         this.postService.edit(postId,title,price,description,image,category);
         return "redirect:/categories";
@@ -62,9 +67,17 @@ public class PostController {
     public String addPost(@RequestParam String title,
                           @RequestParam Double price,
                           @RequestParam String description,
-                          @RequestParam Byte[] image,
-                          @RequestParam Category category){
-        this.postService.save(title,price,description,image,category);
+                          @RequestParam("image") MultipartFile imageFile,
+                          @RequestParam Category category,
+                          HttpServletRequest request){
+        byte[] imageBytes;
+        try {
+            imageBytes = imageFile.getBytes();
+        } catch (IOException e) {
+            // Handle exception
+            return "redirect:/";
+        }
+        this.postService.save(title, price, description, imageBytes, category, request);
         return "redirect:/categories";
     }
 

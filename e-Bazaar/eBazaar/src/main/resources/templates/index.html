@@ -263,35 +263,33 @@
               </div>
               </br></br>
               <div class="tab_container">
-                  <form class="m" style="max-width: 500px;">
+                  <form class="m" method="post" action="/add" style="max-width: 500px;">
                       <div class="mb-3">
                         <label for="title">*Title</label>
-                        <input type="text" id="title" required placeholder="Title">
+                        <input name="title" type="text" id="title" required placeholder="Title">
                       </div>
                       <div class="mb-3">
                         <label for="text">*Add description</label>
-                        <textarea id="text" required placeholder="Description"></textarea>
+                        <textarea name="description" id="text" required placeholder="Description"></textarea>
                       </div>
                       <div class="mb-3">
                         <label for="category">*Category</label>
-                        <select id="category" required>
-                          <option value="">Select category</option>
-                          <option value="ivna">ivana</option>
+                        <select name="category" id="category" required>
+                          <option value="1">category</option>
+                          <option value="SPORT">SPORT</option>
+                          <option value="CARS">CARS</option>
+                          <option value="RESIDENCE">RESIDENCE</option>
+                          <option value="WORK">WORK</option>
+                          <option value="HOME">HOME</option>
+                          <option value="TOOLS">TOOLS</option>
                         </select>
                       </div>
                       <div class="mb-3">
                         <label for="price">*Price</label>
-                        <input type="text" id="price" required placeholder="Price">
+                        <input name="price" type="text" id="price" required placeholder="Price">
                       </div>
-                      <div class="mb-3">
-                        <label for="year">*Year</label>
-                        <input type="text" id="year" required placeholder="Year">
-                      </div>
-
-                    <div class="mb-3">
-                    <label for="picture">*Picture</label>
-                    <input type="file" id="picture" required>
-                    </div>
+                    <label for="image">Image:</label>
+                    <input type="file" id="image" name="image" required><br>
                     </br></br>
                       <div class="d-flex justify-content-center">
                           <button type="submit" class="btn btn-outline-dark btn-block ">Post</button>

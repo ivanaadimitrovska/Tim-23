@@ -2,6 +2,7 @@ package mk.finki.tim23.ebazaar.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.apache.tomcat.util.codec.binary.Base64;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -19,8 +20,7 @@ public class Post {
     private LocalDateTime date;
     private String description;
 
-    @Lob
-    private Byte[] image;
+    private byte[] image;
 
     @Enumerated(value = EnumType.STRING)
     private Category category;
@@ -34,7 +34,7 @@ public class Post {
     public Post() {}
 
     public Post(String title, Double price, String description,
-                Byte[] image, Category category, User postAuthor) {
+                byte[] image, Category category, User postAuthor) {
         this.title = title;
         this.price = price;
         this.date = LocalDateTime.now();
@@ -43,5 +43,9 @@ public class Post {
         this.category = category;
         this.postAuthor = postAuthor;
         this.comments = new ArrayList<>();
+    }
+
+    public String generateBase64Image() {
+        return Base64.encodeBase64String(this.image);
     }
 }
