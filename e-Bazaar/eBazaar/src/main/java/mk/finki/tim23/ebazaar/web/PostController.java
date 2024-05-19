@@ -82,7 +82,7 @@ public class PostController {
             return "redirect:/";
         }
         this.postService.save(title, price, description, imageBytes, category, request);
-        return "redirect:/home";
+        return "redirect:/posts";
     }
 
     @DeleteMapping("/delete/{postId}")
