@@ -23,14 +23,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User register(String username, String password, String confirmPassowrd, String email, String fullName) {
-        if (username==null || username.isEmpty() || password==null || password.isEmpty())
-        throw new InvalidUsernameOrPasswordException();
+    public User register(String username, String password, String confirmPassowrd, String email, String fullName, String phoneNumber) {
+        if (username == null || username.isEmpty() || password == null || password.isEmpty())
+            throw new InvalidUsernameOrPasswordException("invalid username");
         if (!password.equals(confirmPassowrd))
             throw new PasswordsDoNotMatchException();
-        if(this.userRepository.findByUsername(username).isPresent())
+        if (this.userRepository.findByUsername(username).isPresent())
             throw new UsernameAlreadyExistsException(username);
-        User user = new User(username,passwordEncoder.encode(password),email,fullName);
+        User user = new User(username, passwordEncoder.encode(password), email, fullName, phoneNumber);
         return userRepository.save(user);
     }
 }

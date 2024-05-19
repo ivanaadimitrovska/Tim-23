@@ -25,14 +25,13 @@ public class Post {
 
     @Enumerated(value = EnumType.STRING)
     private Category category;
-
     @ManyToOne
     private User postAuthor;
-
     @OneToMany
     private List<Comment> comments;
 
-    public Post() {}
+    public Post() {
+    }
 
     public Post(String title, Double price, String description,
                 byte[] image, Category category, User postAuthor) {
