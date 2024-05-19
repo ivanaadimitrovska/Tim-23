@@ -1,5 +1,6 @@
 package mk.finki.tim23.ebazaar.service;
 
+import jakarta.servlet.http.HttpServletRequest;
 import mk.finki.tim23.ebazaar.models.Category;
 import mk.finki.tim23.ebazaar.models.Post;
 import mk.finki.tim23.ebazaar.models.User;
@@ -18,9 +19,9 @@ public interface PostService {
 
     Optional<Post> findByTitle(String title);
 
-    Optional<Post> save(String title, Double price, String description, Byte[] image, Category category);
-
-    Optional<Post> edit(Long id, String title, Double price, String description, Byte[] image, Category category);
+    Optional<Post> save(String title, Double price, String description, byte[] image, Category category, HttpServletRequest request);
+    Optional<Post> edit(Long id, String title, Double price, String description, byte[] image, Category category);
 
     void deleteById(Long id);
 }
+

@@ -7,5 +7,5 @@ import mk.finki.tim23.ebazaar.models.User;
 
 public interface UserService {
 
-    User register(String username, String password, String confirmPassowrd, String email, String fullName);
+    User register(String username, String password, String confirmPassowrd, String email, String fullName, String phoneNumber);
 }

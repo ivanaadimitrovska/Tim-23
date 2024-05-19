@@ -3,7 +3,9 @@ package mk.finki.tim23.ebazaar.web;
 import jakarta.servlet.http.HttpServletRequest;
 import mk.finki.tim23.ebazaar.models.User;
 import mk.finki.tim23.ebazaar.models.exceptions.InvalidUserCredentialsException;
+import mk.finki.tim23.ebazaar.models.exceptions.InvalidUsernameOrPasswordException;
 import mk.finki.tim23.ebazaar.models.exceptions.PasswordsDoNotMatchException;
+import mk.finki.tim23.ebazaar.models.exceptions.UserNotFoundException;
 import mk.finki.tim23.ebazaar.service.AuthService;
 import mk.finki.tim23.ebazaar.service.UserService;
 import org.springframework.stereotype.Controller;
@@ -45,9 +47,10 @@ public class UserController {
                            @RequestParam String password,
                            @RequestParam String confirmPassword,
                            @RequestParam String fullName,
-                           @RequestParam String email) {
+                           @RequestParam String email,
+                           @RequestParam String phoneNumber) {
         try {
-            this.userService.register(username, password, confirmPassword, email, fullName);
+            this.userService.register(username, password, confirmPassword, email, fullName, phoneNumber);
             //TODO: Change the return
             return "redirect:/user/login";
         } catch (InvalidUserCredentialsException | PasswordsDoNotMatchException exception) {
@@ -62,7 +65,7 @@ public class UserController {
         return "login";
     }
 
-    @PostMapping("/login")
+    @GetMapping("/login/credentials")
     public String login(HttpServletRequest request, Model model) {
         User user = null;
         try {
@@ -70,13 +73,11 @@ public class UserController {
                     request.getParameter("password"));
             request.getSession().setAttribute("user", user);
 
-            User serssionUser = (User) request.getSession().getAttribute("user");
             return "redirect:/home";
-        } catch (InvalidUserCredentialsException exception) {
+        } catch (InvalidUsernameOrPasswordException | UserNotFoundException e) {
             model.addAttribute("hasError", true);
-            model.addAttribute("error", exception.getMessage());
-            //TODO: Change the return
-            return "redirect:/index";
+            model.addAttribute("error", e.getMessage());
+            return "login";
         }
     }
 }

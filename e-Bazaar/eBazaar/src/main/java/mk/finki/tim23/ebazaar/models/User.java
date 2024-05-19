@@ -19,6 +19,7 @@ public class User {
     private String password;
     private String email;
     private String fullName;
+    private String phoneNumber;
 
     @Enumerated(value = EnumType.STRING)
     private Role role;
@@ -26,12 +27,14 @@ public class User {
     @OneToMany
     private List<Post> posts;
 
-    public User() {}
+    public User() {
+    }
 
-    public User(String username, String password, String email, String fullName) {
+    public User(String username, String password, String email, String fullName, String phoneNumber) {
         this.username = username;
         this.password = password;
         this.email = email;
+        this.phoneNumber = phoneNumber;
         this.fullName = fullName;
         this.role = Role.USER;
         this.posts = new ArrayList<>();

@@ -1,20 +1,21 @@
 package mk.finki.tim23.ebazaar.web;
 
+import jakarta.servlet.http.HttpServletRequest;
+import mk.finki.tim23.ebazaar.models.Category;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/app")
+@RequestMapping("/")
 public class AppController {
 
-    @GetMapping()
-    public String getPage(){
-        return "index";
-    }
-
-    @GetMapping("/about")
-    public String getAbout(){
-        return "about";
+    @GetMapping({"", "/home"})
+    public String getHome(HttpServletRequest request, Model model) {
+        model.addAttribute("categories", Category.values());
+        model.addAttribute("user", request.getSession().getAttribute("user"));
+        model.addAttribute("bodyContent", "index");
+        return "master-template";
     }
 }
