@@ -39,7 +39,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Optional<Comment> save(String message, String commentedBy, Long postId) {
         Post post = this.postRepository.findById(postId)
-                .orElseThrow( () -> new PostNotFoundException());
+                .orElseThrow(PostNotFoundException::new);
         User user = this.userRepository.findByUsername(commentedBy)
                 .orElseThrow( () -> new UserNotFoundException(commentedBy));
         Comment comment = new Comment(message,user,post);

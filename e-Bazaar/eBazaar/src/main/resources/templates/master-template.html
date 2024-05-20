@@ -166,13 +166,12 @@
     }
 </style>
 <body>
-<header th:replace="header"/>
+<header th:replace="header"></header>
 
-<section th:include="${bodyContent}">
+<div th:replace="~{${bodyContent}}"></div>
 
-</section>
 <!-- Footer -->
-<footer th:replace="footer"/>
+<footer th:replace="footer"></footer>
 </body>
 <script th:src="@{/js/jquery-3.4.1.min.js}"></script>
 <script th:src="@{/js/bootstrap.js}"></script>

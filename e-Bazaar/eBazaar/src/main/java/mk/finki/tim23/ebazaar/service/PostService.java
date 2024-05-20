@@ -20,8 +20,11 @@ public interface PostService {
     Optional<Post> findByTitle(String title);
 
     Optional<Post> save(String title, Double price, String description, byte[] image, Category category, HttpServletRequest request);
+
     Optional<Post> edit(Long id, String title, Double price, String description, byte[] image, Category category);
 
     void deleteById(Long id);
+
+    Optional<Post> addComment(Long postId, String message, User commentedBy);
 }
 

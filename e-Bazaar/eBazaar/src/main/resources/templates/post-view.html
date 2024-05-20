@@ -1,92 +1,57 @@
-<style>
-    form input[type="text"],
-    form input[type="email"],
-    form select,
-    form textarea {
-        width: 100%;
-        padding: 10px;
-        margin: 5px 0;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-    }
-
-    form label {
-        display: block;
-    }
-
-    /* Card styles */
-    .card {
-        max-width: 540px;
-        border: 1px solid #ddd;
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        margin: 0 auto; /* Center the cards */
-    }
-
-    .card img {
-        width: 100%;
-        height: auto;
-        object-fit: cover;
-    }
-
-    .card-body {
-        padding: 15px;
-    }
-
-    .card-title {
-        margin: 0;
-        font-size: 1.25rem;
-        font-weight: bold;
-    }
-
-    .card-text {
-        margin: 10px 0;
-        color: #555;
-    }
-
-    .text-body-secondary {
-        color: #888;
-    }
-
-    .card-date {
-        margin-top: 10px;
-        font-size: 0.875rem;
-        color: #6c757d;
-        background-color: #f8f9fa;
-        padding: 5px 10px;
-        border-radius: 5px;
-        display: inline-block;
-    }
-</style>
-<div>
-    <th:block xmlns:th="http://www.thymeleaf.org">
-        <div>
-            <h2 class="m-4" th:text="${category != null ? category : 'All Posts'}"></h2>
-        </div>
-        <div class="container mt-5 mb-5">
-            <div th:each="post : ${posts}" class="card mb-3">
-                <div class="row g-0">
-                    <div class="col-md-4">
-                        <img th:src="@{'data:image/jpeg;base64,'+${post.generateBase64Image()}}" alt="Post Image"
-                             class="w-100 h-auto">
+<div class="container mt-5">
+    <div class="card w-75 m-auto p-5 shadow-lg">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <img th:src="@{'data:image/jpeg;base64,'+${post.generateBase64Image()}}" alt="Post Image"
+                     class="w-100 h-auto">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body d-flex flex-column">
+                    <div class="d-flex justify-content-between">
+                        <h5 class="card-title mb-1" th:text="${post.getTitle()}">
+                        </h5>
+                        <p class="text-body-secondary mb-1 font-weight-bold h5"
+                           th:text="'Price: $' + ${post.getPrice()}"></p>
                     </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                <a th:href="@{'/post/' + ${post.getId()}}" style="text-decoration: none; color: black"
-                                   th:text="${post.getTitle()}"></a>
-                            </h5>
-                            <p class="text-body-secondary" th:text="${post.getTitle()}"></p>
-                            <p th:text="'Price: $' + ${post.getPrice()}"></p>
-                            <p class="card-text" th:text="${post.getDescription()}"></p>
-                            <p class="card-text">
-                                <small th:text="${post.getDate()}" class="text-body-secondary"></small>
-                            </p>
-                        </div>
-                    </div>
+                    <p class="text-body-secondary" th:text="${post.getTitle()}"></p>
+                    <p class="card-text" th:text="${post.getCategory()}"></p>
+                    <p class="card-text" th:text="${post.getDescription()}"></p>
+                    <p class="card-text">
+                        <small th:text="${post.getDate()}" class="text-body-secondary"></small>
+                    </p>
+
+                    <p class="font-weight-bold h5" th:text="${post.postAuthor.getPhoneNumber()}"></p>
                 </div>
             </div>
         </div>
-    </th:block>
+    </div>
+</div>
+
+<div class="row d-flex justify-content-center mt-5 mb-5" style="background-color: #f0f2f5;">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow-0 border mt-3" style="background-color: #ded8d8;">
+            <div class="card-body p-4">
+                <div data-mdb-input-init class="form-outline mb-4">
+                    <form method="post" th:action="@{'/' + ${post.getId()} + '/comment'}"
+                          class="d-flex align-items-center">
+                        <input type="text" id="addComment" class="form-control me-2" name="message"
+                               placeholder="Type comment..."
+                               th:disabled="${user == null}"/>
+                        <button type="submit" class="btn btn-success btn-sm" th:disabled="${user == null}">Add Comment
+                        </button>
+                    </form>
+                </div>
+
+                <div class="mb-4" th:each="comment : ${comments}">
+                    <div class="card-body bg-white">
+                        <p th:text="${comment.message}"></p>
+                    </div>
+                    <p class="small mb-0 ms-2 mt-2" th:text="${comment.commentedBy.getUsername()}"></p>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
 </div>

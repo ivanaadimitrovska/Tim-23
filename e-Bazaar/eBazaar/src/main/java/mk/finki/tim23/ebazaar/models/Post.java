@@ -5,6 +5,7 @@ import lombok.Data;
 import org.apache.tomcat.util.codec.binary.Base64;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -27,8 +28,6 @@ public class Post {
     private Category category;
     @ManyToOne
     private User postAuthor;
-    @OneToMany
-    private List<Comment> comments;
 
     public Post() {
     }
@@ -42,10 +41,13 @@ public class Post {
         this.image = image;
         this.category = category;
         this.postAuthor = postAuthor;
-        this.comments = new ArrayList<>();
     }
 
     public String generateBase64Image() {
         return Base64.encodeBase64String(this.image);
+    }
+
+    public String getDate() {
+        return date.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
     }
 }

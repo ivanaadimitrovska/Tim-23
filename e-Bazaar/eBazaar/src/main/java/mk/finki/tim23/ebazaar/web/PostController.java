@@ -2,7 +2,10 @@ package mk.finki.tim23.ebazaar.web;
 
 import jakarta.servlet.http.HttpServletRequest;
 import mk.finki.tim23.ebazaar.models.Category;
+import mk.finki.tim23.ebazaar.models.Comment;
 import mk.finki.tim23.ebazaar.models.Post;
+import mk.finki.tim23.ebazaar.models.User;
+import mk.finki.tim23.ebazaar.service.CommentService;
 import mk.finki.tim23.ebazaar.service.PostService;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
@@ -12,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/")
@@ -19,9 +23,11 @@ import java.util.List;
 public class PostController {
 
     private final PostService postService;
+    private final CommentService commentService;
 
-    public PostController(PostService postService) {
+    public PostController(PostService postService, CommentService commentService) {
         this.postService = postService;
+        this.commentService = commentService;
     }
 
     @GetMapping("/posts")
@@ -29,8 +35,38 @@ public class PostController {
         List<Post> posts = this.postService.findAll();
         model.addAttribute("posts", posts);
         model.addAttribute("user", request.getSession().getAttribute("user"));
-        model.addAttribute("bodyContent", "post-view");
+        model.addAttribute("bodyContent", "posts");
         return "master-template";
+    }
+
+    @GetMapping("/posts/{postId}/comments")
+    public String getPost(@PathVariable Long postId, Model model, HttpServletRequest request) {
+        if (this.postService.findById(postId).isPresent()) {
+            Post post = this.postService.findById(postId).get();
+            List<Comment> comments = commentService.findAllCommentsOnAPost(postId);
+            model.addAttribute("comments", comments);
+            model.addAttribute("post", post);
+            model.addAttribute("user", request.getSession().getAttribute("user"));
+            model.addAttribute("bodyContent", "post-view");
+            return "master-template";
+        }
+        return "redirect:/posts";
+    }
+
+    @PostMapping("/{postId}/comment")
+    public String addComment(@PathVariable Long postId,
+                             @RequestParam String message,
+                             HttpServletRequest request) {
+        User currentUser = (User) request.getSession().getAttribute("user");
+        if (currentUser == null) {
+            return "redirect:/user/login";
+        }
+        Optional<Post> postOptional = postService.findById(postId);
+        if (postOptional.isPresent()) {
+            Post post = postOptional.get();
+            commentService.save(message, currentUser.getUsername(), post.getId());
+        }
+        return "redirect:/posts/" + postId + "/comments";
     }
 
     @GetMapping("/posts/{category}")
@@ -40,7 +76,7 @@ public class PostController {
         List<Post> posts = this.postService.findAllPostByCategory(c);
         model.addAttribute("posts", posts);
         model.addAttribute("category", c);
-        model.addAttribute("bodyContent", "post-view");
+        model.addAttribute("bodyContent", "posts");
         return "master-template";
     }
 
