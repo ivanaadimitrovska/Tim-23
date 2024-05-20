@@ -8,7 +8,6 @@ import mk.finki.tim23.ebazaar.models.User;
 import mk.finki.tim23.ebazaar.service.CommentService;
 import mk.finki.tim23.ebazaar.service.PostService;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -53,6 +52,59 @@ public class PostController {
         return "redirect:/posts";
     }
 
+    @GetMapping("/posts/{category}")
+    public String getAllPostsByCategory(@PathVariable String category,
+                                        Model model) {
+        Category c = Category.valueOf(category);
+        List<Post> posts = this.postService.findAllPostByCategory(c);
+        model.addAttribute("posts", posts);
+        model.addAttribute("category", c);
+        model.addAttribute("bodyContent", "posts");
+        return "master-template";
+    }
+
+    @GetMapping("/form")
+    public String getForm(HttpServletRequest request, Model model) {
+        model.addAttribute("categories", Category.values());
+        model.addAttribute("bodyContent", "form");
+        model.addAttribute("user", request.getSession().getAttribute("user"));
+        return "master-template";
+    }
+
+    @GetMapping("posts/edit/{postId}")
+    public String editPost(HttpServletRequest request, @PathVariable Long postId, Model model) {
+        if (this.postService.findById(postId).isPresent()) {
+            Post post = this.postService.findById(postId).get();
+            List<Category> categories = List.of(Category.values());
+            model.addAttribute("categories", categories);
+            model.addAttribute("bodyContent", "form");
+            model.addAttribute("user", request.getSession().getAttribute("user"));
+            model.addAttribute("post", post);
+            return "master-template";
+        }
+        return "redirect:/index";
+    }
+
+    @PostMapping("posts/{postId}")
+    public String updatePost(@PathVariable String postId,
+                             @RequestParam String title,
+                             @RequestParam Double price,
+                             @RequestParam String description,
+                             @RequestParam("image") MultipartFile imageFile,
+                             @RequestParam Category category,
+                             Model model) {
+        Long postIdLong = Long.valueOf(postId);
+        byte[] imageBytes;
+        try {
+            imageBytes = imageFile.getBytes();
+        } catch (IOException e) {
+            // Handle exception
+            return "redirect:/";
+        }
+        this.postService.edit(postIdLong, title, price, description, imageBytes, category);
+        return "redirect:/posts/" + postIdLong + "/comments";
+    }
+
     @PostMapping("/{postId}/comment")
     public String addComment(@PathVariable Long postId,
                              @RequestParam String message,
@@ -67,40 +119,6 @@ public class PostController {
             commentService.save(message, currentUser.getUsername(), post.getId());
         }
         return "redirect:/posts/" + postId + "/comments";
-    }
-
-    @GetMapping("/posts/{category}")
-    public String getAllPostsByCategory(@PathVariable String category,
-                                        Model model) {
-        Category c = Category.valueOf(category);
-        List<Post> posts = this.postService.findAllPostByCategory(c);
-        model.addAttribute("posts", posts);
-        model.addAttribute("category", c);
-        model.addAttribute("bodyContent", "posts");
-        return "master-template";
-    }
-
-    @GetMapping("/edit/{postId}")
-    public String editPost(@PathVariable Long postId, Model model) {
-        if (this.postService.findById(postId).isPresent()) {
-            Post post = this.postService.findById(postId).get();
-            List<Category> categories = List.of(Category.values());
-            model.addAttribute("categories", categories);
-            model.addAttribute("post", post);
-            return "categories";
-        }
-        return "redirect:/index.html";
-    }
-
-    @PostMapping("/{postId}")
-    public String updatePost(@RequestParam Long postId,
-                             @RequestParam String title,
-                             @RequestParam Double price,
-                             @RequestParam String description,
-                             @RequestParam byte[] image,
-                             @RequestParam Category category) {
-        this.postService.edit(postId, title, price, description, image, category);
-        return "redirect:/categories";
     }
 
     @PostMapping("/add")
@@ -125,14 +143,6 @@ public class PostController {
     public String deletePost(@PathVariable Long postId) {
         this.postService.deleteById(postId);
         return "redirect:/categories";
-    }
-
-    @GetMapping("/form")
-    public String getForm(HttpServletRequest request, Model model) {
-        model.addAttribute("categories", Category.values());
-        model.addAttribute("bodyContent", "form");
-        model.addAttribute("user", request.getSession().getAttribute("user"));
-        return "master-template";
     }
 }
 
