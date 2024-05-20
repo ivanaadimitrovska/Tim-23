@@ -139,10 +139,10 @@ public class PostController {
         return "redirect:/posts";
     }
 
-    @DeleteMapping("/delete/{postId}")
+    @DeleteMapping("posts/delete/{postId}")
     public String deletePost(@PathVariable Long postId) {
         this.postService.deleteById(postId);
-        return "redirect:/categories";
+        return "redirect:/posts";
     }
 }
 

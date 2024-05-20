@@ -3,7 +3,7 @@
         <div class="text-center mb-4">
             <h2>Post Form</h2>
         </div>
-        <form class="m" style="max-width: 500px; align-self: center"
+        <form class="m"
               th:action="${post != null} ? @{'/posts/' + ${post.getId()}} : @{'/add'}"
               method="POST" enctype="multipart/form-data">
             <div class="mb-3">
@@ -45,8 +45,10 @@
                     <button type="submit" class="btn btn-outline-dark">Post</button>
                 </th:block>
                 <th:block th:if="${user == null}">
-                    <button type="button" class="btn btn-outline-dark" disabled>Post</button>
-                    <span class="text-muted ms-2">Please <a href="/user/login">log in</a> to post.</span>
+                    <button type="button" class="btn btn-outline-dark" disabled>Post</button><br>
+                    <div>
+                        <span class="text-muted ms-2">Please <a href="/user/login">log in</a> to post.</span>
+                    </div>
                 </th:block>
             </div>
         </form>
