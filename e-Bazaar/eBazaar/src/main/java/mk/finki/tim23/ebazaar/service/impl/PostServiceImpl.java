@@ -66,8 +66,10 @@ public class PostServiceImpl implements PostService {
         post.setTitle(title);
         post.setPrice(price);
         post.setDescription(description);
-        post.setImage(image);
         post.setCategory(category);
+        if (image.length != 0) {
+            post.setImage(image);
+        }
         this.postRepository.save(post);
         return Optional.of(post);
     }

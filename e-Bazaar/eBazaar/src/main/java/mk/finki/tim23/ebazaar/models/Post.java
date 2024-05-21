@@ -29,6 +29,9 @@ public class Post {
     @ManyToOne
     private User postAuthor;
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
+
     public Post() {
     }
 

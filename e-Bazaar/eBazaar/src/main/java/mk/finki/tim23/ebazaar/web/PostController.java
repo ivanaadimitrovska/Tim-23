@@ -54,11 +54,13 @@ public class PostController {
 
     @GetMapping("/posts/{category}")
     public String getAllPostsByCategory(@PathVariable String category,
-                                        Model model) {
+                                        Model model, HttpServletRequest request) {
         Category c = Category.valueOf(category);
         List<Post> posts = this.postService.findAllPostByCategory(c);
         model.addAttribute("posts", posts);
         model.addAttribute("category", c);
+        model.addAttribute("user", request.getSession().getAttribute("user"));
+
         model.addAttribute("bodyContent", "posts");
         return "master-template";
     }
@@ -139,7 +141,7 @@ public class PostController {
         return "redirect:/posts";
     }
 
-    @DeleteMapping("posts/delete/{postId}")
+    @GetMapping("posts/delete/{postId}")
     public String deletePost(@PathVariable Long postId) {
         this.postService.deleteById(postId);
         return "redirect:/posts";
