@@ -92,6 +92,8 @@ public class PostController {
                              @RequestParam String title,
                              @RequestParam Double price,
                              @RequestParam String description,
+                             @RequestParam(required = false) String location,
+                             @RequestParam(required = false) String city,
                              @RequestParam("image") MultipartFile imageFile,
                              @RequestParam Category category,
                              Model model) {
@@ -103,7 +105,7 @@ public class PostController {
             // Handle exception
             return "redirect:/";
         }
-        this.postService.edit(postIdLong, title, price, description, imageBytes, category);
+        this.postService.edit(postIdLong, title, price, description, imageBytes, category, location, city);
         return "redirect:/posts/" + postIdLong + "/comments";
     }
 
@@ -127,6 +129,8 @@ public class PostController {
     public String addPost(@RequestParam String title,
                           @RequestParam Double price,
                           @RequestParam String description,
+                          @RequestParam(required = false) String location,
+                          @RequestParam(required = false) String city,
                           @RequestParam("image") MultipartFile imageFile,
                           @RequestParam Category category,
                           HttpServletRequest request) {
@@ -137,7 +141,7 @@ public class PostController {
             // Handle exception
             return "redirect:/";
         }
-        this.postService.save(title, price, description, imageBytes, category, request);
+        this.postService.save(title, price, description, imageBytes, category, request, location, city);
         return "redirect:/posts";
     }
 

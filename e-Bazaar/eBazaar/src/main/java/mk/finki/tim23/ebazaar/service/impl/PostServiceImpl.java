@@ -51,21 +51,22 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Optional<Post> save(String title, Double price, String description,
-                               byte[] image, Category category, HttpServletRequest request) {
-        //TODO: get the postAuthorUsername
+                               byte[] image, Category category, HttpServletRequest request, String location, String city) {
         User user = (User) request.getSession().getAttribute("user");
-        Post post = new Post(title, price, description, image, category, user);
+        Post post = new Post(title, price, description, image, category, user, location, city);
         this.postRepository.save(post);
         return Optional.of(post);
     }
 
     @Override
-    public Optional<Post> edit(Long id, String title, Double price, String description, byte[] image, Category category) {
+    public Optional<Post> edit(Long id, String title, Double price, String description, byte[] image, Category category, String location, String city) {
         Post post = this.postRepository.findById(id)
                 .orElseThrow(PostNotFoundException::new);
         post.setTitle(title);
         post.setPrice(price);
         post.setDescription(description);
+        if (location != null) post.setLocation(location);
+        if (city != null) post.setCity(city);
         post.setCategory(category);
         if (image.length != 0) {
             post.setImage(image);

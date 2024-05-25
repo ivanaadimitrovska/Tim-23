@@ -21,6 +21,7 @@
             </a>
             <span th:if="${user != null}">
                 <span th:text="${user.fullName}"></span>
+                  <a href="/user/logout" class="btn btn-danger ms-3 text-light">Logout</a>
             </span>
         </span>
     </div>

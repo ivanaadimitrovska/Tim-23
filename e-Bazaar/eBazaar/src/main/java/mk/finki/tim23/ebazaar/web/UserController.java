@@ -1,6 +1,7 @@
 package mk.finki.tim23.ebazaar.web;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import mk.finki.tim23.ebazaar.models.User;
 import mk.finki.tim23.ebazaar.models.exceptions.InvalidUserCredentialsException;
 import mk.finki.tim23.ebazaar.models.exceptions.InvalidUsernameOrPasswordException;
@@ -79,5 +80,14 @@ public class UserController {
             model.addAttribute("error", e.getMessage());
             return "login";
         }
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+        return "redirect:/user/login"; //
     }
 }

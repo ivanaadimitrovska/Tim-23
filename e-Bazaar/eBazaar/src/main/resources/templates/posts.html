@@ -68,7 +68,7 @@
             <div class="row">
                 <div th:each="post : ${posts}" class="card mb-3">
                     <div class="row g-0">
-                        <div class="col-md-4">
+                        <div class="col-md-4 d-flex justify-content-center align-items-center">
                             <img th:src="@{'data:image/jpeg;base64,'+${post.generateBase64Image()}}" alt="Post Image"
                                  class="w-100 h-auto">
                         </div>
@@ -83,7 +83,6 @@
                                     <p class=" font-weight-bold text-body-secondary mb-1 "
                                        th:text="'Price: $' + ${post.getPrice()}"></p>
                                 </div>
-                                <p class="text-body-secondary" th:text="${post.getTitle()}"></p>
                                 <p class="card-text" th:text="${post.getCategory()}"></p>
                                 <div class="mt-auto">
                                     <p class="card-text">

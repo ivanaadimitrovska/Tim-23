@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+
 
 @Entity
 @Data
@@ -29,6 +29,10 @@ public class Post {
     @ManyToOne
     private User postAuthor;
 
+    //long,lat
+    private String location;
+    private String city;
+
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
@@ -36,7 +40,7 @@ public class Post {
     }
 
     public Post(String title, Double price, String description,
-                byte[] image, Category category, User postAuthor) {
+                byte[] image, Category category, User postAuthor, String location, String city) {
         this.title = title;
         this.price = price;
         this.date = LocalDateTime.now();
@@ -44,6 +48,8 @@ public class Post {
         this.image = image;
         this.category = category;
         this.postAuthor = postAuthor;
+        this.location = location;
+        this.city = city;
     }
 
     public String generateBase64Image() {

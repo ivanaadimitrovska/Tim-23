@@ -1,10 +1,44 @@
-
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<style>
+    #map {
+        height: 200px;
+        width: 100%;
+        margin-top: 3%;
+    }
+</style>
 <div class="container mt-5 background">
     <div class="card w-75 m-auto p-5 shadow-lg">
         <div class="row g-0">
             <div class="col-md-4">
                 <img th:src="@{'data:image/jpeg;base64,'+${post.generateBase64Image()}}" alt="Post Image"
                      class="w-100 h-auto">
+
+                <th:block th:if="${post.location != null}">
+                    <div id="map"></div>
+                    <script>
+                        // Retrieve location data from Thymeleaf expression
+                        var postLocation = '[[${post.location}]]';
+                        var latlng = postLocation.split(',');
+
+                        // Check if latlng contains valid latitude and longitude values
+                        if (latlng.length === 2 && !isNaN(parseFloat(latlng[0])) && !isNaN(parseFloat(latlng[1]))) {
+                            var lat = parseFloat(latlng[0]);
+                            var lng = parseFloat(latlng[1]);
+
+                            // Create the map and set the view
+                            var map = L.map('map').setView([lat, lng], 13);
+
+                            // Add OpenStreetMap tile layer
+                            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                                attribution: '© OpenStreetMap contributors'
+                            }).addTo(map);
+
+                            // Add marker to the map
+                            L.marker([lat, lng]).addTo(map);
+                        }
+                    </script>
+                </th:block>
             </div>
             <div class="col-md-8">
                 <div class="card-body d-flex flex-column">
@@ -14,14 +48,20 @@
                         <p class="text-body-secondary mb-1 font-weight-bold h5"
                            th:text="'Price: $' + ${post.getPrice()}"></p>
                     </div>
-                    <p class="text-body-secondary" th:text="${post.getTitle()}"></p>
-                    <p class="card-text" th:text="${post.getCategory()}"></p>
-                    <p class="card-text" th:text="${post.getDescription()}"></p>
-                    <p class="card-text">
+                    <span>Category: </span>
+                    <span class="card-text" th:text="${post.getCategory()}"></span></p>
+                    <p>
+                        <span>Description: </span>
+                        <span class="card-text" th:text="${post.getDescription()}"></span></p>
+                    <p><span>Date- </span>
+                        <span class="card-text">
                         <small th:text="${post.getDate()}" class="text-body-secondary"></small>
+                    </span></p>
+                    <p th:if="post.getCity!=null"><span>City - </span><span th:text="${post.getCity()}"></span></p>
+                    <p><span>Phone Number -</span>
+                        <span class="font-weight-bold h5" th:text="${post.postAuthor.getPhoneNumber()}"></span>
                     </p>
 
-                    <p class="font-weight-bold h5" th:text="${post.postAuthor.getPhoneNumber()}"></p>
 
                     <div class="p-1 justify-content-center"
                          th:if="${user?.getUsername() == post.getPostAuthor().getUsername()}">
@@ -49,11 +89,11 @@
                     </form>
                 </div>
 
-                <div class="mb-4 rounded-pill" th:each="comment : ${comments}">
-                    <div class="p-1 bg-white rounded-pill">
-                        <p th:text="${comment.message}"></p>
+                <div class="mb-2 rounded-pill" th:each="comment : ${comments}">
+                    <div class="bg-white rounded-pill">
+                        <p class="p-2" th:text="${comment.message}"></p>
                     </div>
-                    <p class="small mb-0 ms-2 mt-2" th:text="${comment.commentedBy.getUsername()}"></p>
+                    <p class="small mb-0 ms-2 text-weight-bold" th:text="${comment.commentedBy.getUsername()}"></p>
                 </div>
 
 
@@ -62,3 +102,4 @@
     </div>
 
 </div>
+
